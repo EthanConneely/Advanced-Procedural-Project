@@ -1,0 +1,6 @@
+---
+Language: Cpp
+BasedOnStyle: Chromium
+BreakBeforeBraces: Allman
+IndentWidth: 4
+ColumnLimit: 180
