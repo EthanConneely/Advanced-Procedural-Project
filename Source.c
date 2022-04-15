@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 // Linked list node
-typedef struct node
+typedef struct Node
 {
     int crn;            // Company Registration Number (Assume an integer – must be unique)
     char name[50];      // Company Name
@@ -20,24 +20,23 @@ typedef struct node
     int lastOrder;      // Last Order
     int numEmployees;   // Number of Employees
     int avgOrder;       // Average Annual Order
-    struct node* next;  // Next node
-} nodeT;
+    struct Node* next;  // Next node
+} NodeT;
 
-bool addNode(nodeT** head, int crn);
-bool removeNode(nodeT** head, int crn);
-bool displayNode(nodeT** head, int crn);
+bool addNode(NodeT** head, int crn);
+bool removeNode(NodeT** head, int crn);
+bool updateNode(NodeT** head, int crn);
+bool displayNode(NodeT** head, int crn);
 
-void printNode(nodeT* node);
-void readNode(nodeT* node);
+void printNode(NodeT* node);
+void readNode(NodeT* node);
 
-void displayAll(nodeT** head);
+void displayAll(NodeT** head);
 void getPassword(char* password, int size);
 
 int main()
 {
-    // char input[30];
-    // getPassword(input, 30);
-    nodeT* database = NULL;
+    NodeT* database = NULL;
 
     int choice;
 
@@ -57,10 +56,11 @@ int main()
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
+        int crn;
+
         switch (choice)
         {
             case 1:
-                int crn;
                 printf("Enter the client's registration number: ");
                 scanf("%d", &crn);
                 if (addNode(&database, crn))
@@ -78,18 +78,25 @@ int main()
                 break;
 
             case 3:
-                int client;
                 printf("Enter the client's registration number: ");
-                scanf("%d", &client);
-                if (!displayNode(&database, client))
+                scanf("%d", &crn);
+                if (!displayNode(&database, crn))
+                {
+                    printf("\nClient not found\n\n");
+                }
+                break;
+
+            case 4:
+                printf("Enter the client's registration number: ");
+                scanf("%d", &crn);
+                if (!updateNode(&database, crn))
                 {
                     printf("\nClient not found\n\n");
                 }
                 break;
 
             default:
-                printf("Exit\n");
-                // Save the data to a file
+                printf("Exiting\n");
                 exit(0);
         }
     }
@@ -99,12 +106,12 @@ int main()
 }
 
 // Add a node to the list returning true if the node was added
-bool addNode(nodeT** head, int crn)
+bool addNode(NodeT** head, int crn)
 {
     // Add the first node
     if ((*head) == NULL)
     {
-        (*head) = (nodeT*)malloc(sizeof(nodeT));
+        (*head) = (NodeT*)malloc(sizeof(NodeT));
         readNode(*head);
         (*head)->crn = crn;
         (*head)->next = NULL;
@@ -113,7 +120,7 @@ bool addNode(nodeT** head, int crn)
     else
     {
         // A clean way to loop through a linked list
-        for (nodeT* node = *head; node != NULL; node = node->next)
+        for (NodeT* node = *head; node != NULL; node = node->next)
         {
             if (node->crn == crn)
             {
@@ -122,7 +129,7 @@ bool addNode(nodeT** head, int crn)
 
             if (node->next == NULL)
             {
-                nodeT* newNode = (nodeT*)malloc(sizeof(nodeT));
+                NodeT* newNode = (NodeT*)malloc(sizeof(NodeT));
                 readNode(newNode);
                 newNode->crn = crn;
                 newNode->next = NULL;
@@ -134,11 +141,10 @@ bool addNode(nodeT** head, int crn)
     }
 }
 
-// Remove a node retirning true if the node was removed
-bool removeNode(nodeT** head, int crn)
+// Remove a node returning true if the node was removed
+bool removeNode(NodeT** head, int crn)
 {
-    // A clean way to loop through a linked list
-    for (nodeT* node = *head; node != NULL; node = node->next)
+    for (NodeT* node = *head; node != NULL; node = node->next)
     {
         if (node->crn == crn)
         {
@@ -148,10 +154,23 @@ bool removeNode(nodeT** head, int crn)
     return true;
 }
 
-bool displayNode(nodeT** head, int crn)
+// Update a node returning true if the node was found
+bool updateNode(NodeT** head, int crn)
 {
-    // A clean way to loop through a linked list
-    for (nodeT* node = *head; node != NULL; node = node->next)
+    for (NodeT* node = *head; node != NULL; node = node->next)
+    {
+        if (node->crn == crn)
+        {
+            readNode(node);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool displayNode(NodeT** head, int crn)
+{
+    for (NodeT* node = *head; node != NULL; node = node->next)
     {
         if (node->crn == crn)
         {
@@ -163,18 +182,17 @@ bool displayNode(nodeT** head, int crn)
     return false;
 }
 
-void displayAll(nodeT** head)
+void displayAll(NodeT** head)
 {
-    // A clean way to loop through a linked list
-    for (nodeT* node = *head; node != NULL; node = node->next)
+    for (NodeT* node = *head; node != NULL; node = node->next)
     {
         printNode(node);
     }
 }
 
-void printNode(nodeT* node)
+void printNode(NodeT* node)
 {
-    printf("Client Details\n");
+    printf("\n");
     printf("Registration Number: %d\n", node->crn);
     // printf("Company Name: %s\n", node->name);
     // printf("Company Country: %s\n", node->country);
@@ -187,7 +205,7 @@ void printNode(nodeT* node)
     printf("\n");
 }
 
-void readNode(nodeT* node)
+void readNode(NodeT* node)
 {
     printf("Client Details\n");
     // printf("Company Name: ");
@@ -207,18 +225,4 @@ void readNode(nodeT* node)
     // printf("Average Annual Order: ");
     // scanf("%d", &node->avgOrder);
     printf("\n");
-}
-
-void getPassword(char* password, int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        password[i] = getch();
-        putch('*');
-        // enter key finishes input
-        if (password[i] == 13)
-        {
-            break;
-        }
-    };
 }
