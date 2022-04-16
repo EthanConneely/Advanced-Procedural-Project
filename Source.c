@@ -8,18 +8,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+enum TurnOver
+{
+    LessThan1Mil,
+    LessThan10Mil,
+    Over10Mil,
+};
+
+enum Employed
+{
+    LessThan10,
+    LessThan100,
+    Over100,
+};
+
+enum AreaOfSales
+{
+    ICT,
+    Medical,
+    Other,
+};
+
 // Linked list node
 typedef struct Node
 {
-    int crn;            // Company Registration Number (Assume an integer – must be unique)
-    char name[50];      // Company Name
-    char country[50];   // Company Country
-    int year;           // Year Company Founded
-    char email[50];     // Email Address (must contain an @, a full stop and a .com)
-    char contact[50];   // Company Contact Name
-    int lastOrder;      // Last Order
-    int numEmployees;   // Number of Employees
-    int avgOrder;       // Average Annual Order
+    int crn;           // Company Registration Number (Assume an integer – must be unique)
+    char name[50];     // Company Name
+    char country[50];  // Company Country
+    int year;          // Year Company Founded
+    char email[50];    // Email Address (must contain an @, a full stop and a .com)
+    char contact[50];  // Company Contact Name
+    int lastOrder;     // Last Order
+    int numEmployees;  // Number of Employees
+    int avgOrder;      // Average Annual Order
+
+    bool vatRegistered;      // Is the Client Vat Registered?
+    enum TurnOver turnover;  // What are the Clients Average Turnover?
+    enum Employed employed;  // How many staff are employed in the Client Company?
+    enum TurnOver turnover;  // Which area of sales is the company?
+
     struct Node* next;  // Next node
 } NodeT;
 
