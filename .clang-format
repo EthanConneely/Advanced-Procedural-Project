@@ -1,4 +1,3 @@
-Language: Cpp
 BasedOnStyle: Chromium
 BreakBeforeBraces: Allman
 IndentWidth: 4
