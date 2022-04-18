@@ -34,15 +34,15 @@ enum AreaOfSales
 // Linked list node
 typedef struct Node
 {
-    int crn;  // Company Registration Number (Assume an integer – must be unique)
-    // char name[50];     // Company Name
-    // char country[50];  // Company Country
-    // int year;          // Year Company Founded
-    // char email[50];    // Email Address (must contain an @, a full stop and a .com)
-    // char contact[50];  // Company Contact Name
-    // int lastOrder;     // Last Order
-    // int numEmployees;  // Number of Employees
-    // int avgOrder;      // Average Annual Order
+    int crn;           // Company Registration Number (Assume an integer – must be unique)
+    char name[50];     // Company Name
+    char country[50];  // Company Country
+    int year;          // Year Company Founded
+    char email[50];    // Email Address (must contain an @, a full stop and a .com)
+    char contact[50];  // Company Contact Name
+    int lastOrder;     // Last Order
+    int numEmployees;  // Number of Employees
+    int avgOrder;      // Average Annual Order
 
     bool vatRegistered;          // Is the Client Vat Registered?
     enum TurnOver turnover;      // What are the Clients Average Turnover?
@@ -114,22 +114,15 @@ int main()
     }
 
     bool isValidPassword = false;
-    printf("%s\n", password);
-    printf("%s\n", username);
 
     // It would make more sense to have checked it when
     // reading it in instead of using a linked list but cant argu with the requirements
     for (LoginNodeT* node = login; node != NULL; node = node->next)
     {
-        printf("\n");
-        printf("%s\n", node->username);
-        printf("%s\n", node->password);
-        printf("%d\n", strcmp(node->username, username));
-        printf("%d\n", strcmp(node->password, password));
         if (strcmp(node->username, username) == 0 && strcmp(node->password, password) == 0)
         {
             isValidPassword = true;
-            printf("Access granted\n");
+            printf("\nAccess granted\n\n");
             break;
         }
     }
@@ -401,15 +394,15 @@ void writeFile(NodeT** head)
     for (NodeT* node = *head; node != NULL; node = node->next)
     {
         fprintf(file, "%d\n", node->crn);
-        // fprintf(file, "%s\n", node->name);
-        // fprintf(file, "%s\n", node->country);
-        // fprintf(file, "%d\n", node->year);
-        // fprintf(file, "%s\n", node->email);
-        // fprintf(file, "%s\n", node->contact);
-        // fprintf(file, "%d\n", node->lastOrder);
-        // fprintf(file, "%d\n", node->numEmployees);
-        // fprintf(file, "%d\n", node->avgOrder);
-        // fprintf(file, "%d\n", node->avgOrder);
+        fprintf(file, "%s\n", node->name);
+        fprintf(file, "%s\n", node->country);
+        fprintf(file, "%d\n", node->year);
+        fprintf(file, "%s\n", node->email);
+        fprintf(file, "%s\n", node->contact);
+        fprintf(file, "%d\n", node->lastOrder);
+        fprintf(file, "%d\n", node->numEmployees);
+        fprintf(file, "%d\n", node->avgOrder);
+        fprintf(file, "%d\n", node->avgOrder);
 
         fprintf(file, "%d\n", node->vatRegistered);
         fprintf(file, "%d\n", node->turnover);
@@ -430,17 +423,14 @@ void getPassword(char* password, int size)
 {
     for (int i = 0; i < size; i++)
     {
-        int c = getch();
+        password[i] = getch();
+        putch('*');
 
         // enter key finishes input
-        if (c == 13)
+        if (password[i] == 13)
         {
+            password[i] = 0;
             break;
-        }
-        else
-        {
-            password[i] = c;
-            putch('*');
         }
     }
 
@@ -467,14 +457,14 @@ void readFile(NodeT** head)
             NodeT* newNode = (NodeT*)malloc(sizeof(NodeT));
 
             fscanf(file, "%d", &newNode->crn);
-            // fscanf(file, "%s\n", newNode->name);
-            // fscanf(file, "%s\n", newNode->country);
-            // fscanf(file, "%d\n", &newNode->year);
-            // fscanf(file, "%s\n", newNode->email);
-            // fscanf(file, "%s\n", newNode->contact);
-            // fscanf(file, "%d\n", &newNode->lastOrder);
-            // fscanf(file, "%d\n", &newNode->numEmployees);
-            // fscanf(file, "%d\n", &newNode->avgOrder);
+            fscanf(file, "%s\n", newNode->name);
+            fscanf(file, "%s\n", newNode->country);
+            fscanf(file, "%d\n", &newNode->year);
+            fscanf(file, "%s\n", newNode->email);
+            fscanf(file, "%s\n", newNode->contact);
+            fscanf(file, "%d\n", &newNode->lastOrder);
+            fscanf(file, "%d\n", &newNode->numEmployees);
+            fscanf(file, "%d\n", &newNode->avgOrder);
 
             int temp;
             fscanf(file, "%d", &temp);
@@ -565,14 +555,14 @@ void printNode(NodeT* node)
 {
     printf("\n");
     printf("Registration Number: %d\n", node->crn);
-    // printf("Company Name: %s\n", node->name);
-    // printf("Company Country: %s\n", node->country);
-    // printf("Year Company Founded: %d\n", node->year);
-    // printf("Email Address: %s\n", node->email);
-    // printf("Company Contact Name: %s\n", node->contact);
-    // printf("Last Order: %d\n", node->lastOrder);
-    // printf("Number of Employees: %d\n", node->numEmployees);
-    // printf("Average Annual Order: %d\n", node->avgOrder);
+    printf("Company Name: %s\n", node->name);
+    printf("Company Country: %s\n", node->country);
+    printf("Year Company Founded: %d\n", node->year);
+    printf("Email Address: %s\n", node->email);
+    printf("Company Contact Name: %s\n", node->contact);
+    printf("Last Order: %d\n", node->lastOrder);
+    printf("Number of Employees: %d\n", node->numEmployees);
+    printf("Average Annual Order: %d\n", node->avgOrder);
 
     printf("Vat Registered:%d\n", node->vatRegistered);
     printf("Turnover:%d\n", node->turnover);
@@ -585,32 +575,52 @@ void printNode(NodeT* node)
 void readNode(NodeT* node)
 {
     printf("Client Details\n");
-    // printf("Company Name: ");
-    // scanf("%s", node->name);
-    // printf("Company Country: ");
-    // scanf("%s", node->country);
-    // printf("Year Company Founded: ");
-    // scanf("%d", &node->year);
-    // printf("Email Address: ");
-    // scanf("%s", node->email);
-    // printf("Company Contact Name: ");
-    // scanf("%s", node->contact);
-    // printf("Last Order: ");
-    // scanf("%d", &node->lastOrder);
-    // printf("Number of Employees: ");
-    // scanf("%d", &node->numEmployees);
-    // printf("Average Annual Order: ");
-    // scanf("%d", &node->avgOrder);
+    printf("Company Name: ");
+    scanf("%s", node->name);
+    printf("Company Country: ");
+    scanf("%s", node->country);
+    printf("Year Company Founded: ");
+    scanf("%d", &node->year);
+
+    // must contain an @ end with .com
+    bool validEmail = false;
+    do
+    {
+        printf("Email Address: ");
+        scanf("%s", node->email);
+
+        char* atIndex = strstr(node->email, "@");
+        char* comIndex = strstr(node->email, ".com");
+
+        // make sure @ comes before .com
+        if (atIndex != NULL && comIndex != NULL && comIndex > atIndex)
+        {
+            validEmail = true;
+        }
+        else
+        {
+            printf("Invalid email address\n");
+        }
+    } while (validEmail == false);
+
+    printf("Company Contact Name: ");
+    scanf("%s", node->contact);
+    printf("Last Order: ");
+    scanf("%d", &node->lastOrder);
+    printf("Number of Employees: ");
+    scanf("%d", &node->numEmployees);
+    printf("Average Annual Order: ");
+    scanf("%d", &node->avgOrder);
 
     printf("Is Vat Registered (0 or 1): ");
     int temp;
     scanf("%d", &temp);
     node->vatRegistered = temp;
-    printf("Turnover: (Less than 1 Million, Less than 10 Million, Over 10 Million)");
+    printf("Turnover: (Less than 1 Million, Less than 10 Million, Over 10 Million): ");
     scanf("%d", &node->turnover);
-    printf("Employed (Less than 10, Less than €100, Over 100)");
+    printf("Employed (Less than 10, Less than €100, Over 100): ");
     scanf("%d", &node->employees);
-    printf("Sales Area (ICT, Medical Devices, Other area)");
+    printf("Sales Area (ICT, Medical Devices, Other area): ");
     scanf("%d", &node->salesArea);
     printf("\n");
 }
