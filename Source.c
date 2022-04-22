@@ -1,5 +1,4 @@
 // TODO Remove clang stuff below
-#define _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_DEPRECATE
 #define _CRT_NONSTDC_NO_DEPRECATE
 
@@ -34,16 +33,15 @@ enum AreaOfSales
 // Linked list node
 typedef struct Node
 {
-    int crn;           // Company Registration Number (Assume an integer – must be unique)
-    char name[50];     // Company Name
-    char country[50];  // Company Country
-    int year;          // Year Company Founded
-    char email[50];    // Email Address (must contain an @, a full stop and a .com)
-    char contact[50];  // Company Contact Name
-    int lastOrder;     // Last Order
-    int numEmployees;  // Number of Employees
-    int avgOrder;      // Average Annual Order
-
+    int crn;                     // Company Registration Number (Assume an integer – must be unique)
+    char name[50];               // Company Name
+    char country[50];            // Company Country
+    int year;                    // Year Company Founded
+    char email[50];              // Email Address (must contain an @, a full stop and a .com)
+    char contact[50];            // Company Contact Name
+    int lastOrder;               // Last Order
+    int numEmployees;            // Number of Employees
+    int avgOrder;                // Average Annual Order
     bool vatRegistered;          // Is the Client Vat Registered?
     enum TurnOver turnover;      // What are the Clients Average Turnover?
     enum Employes employees;     // How many staff are employed in the Client Company?
@@ -61,22 +59,18 @@ typedef struct LoginNode
 } LoginNodeT;
 
 bool addNode(NodeT** head, int crn);
+bool deleteNode(NodeT** head, int crn);
+bool displayNode(NodeT** head, int crn);
 bool removeNode(NodeT** head, int crn);
 bool updateNode(NodeT** head, int crn);
-bool displayNode(NodeT** head, int crn);
-bool deleteNode(NodeT** head, int crn);
-
-void generateStatistics(NodeT** head);
-void listClients(NodeT** head);
-
-void writeFile(NodeT** head);
-void readFile(NodeT** head);
-
-void printNode(NodeT* node);
-void readNode(NodeT* node);
-
 void displayAll(NodeT** head);
+void generateStatistics(NodeT** head);
 void getPassword(char* password, int size);
+void listClients(NodeT** head);
+void printNode(NodeT* node);
+void readFile(NodeT** head);
+void readNode(NodeT* node);
+void writeFile(NodeT** head);
 
 // Menu and option handling
 int main()
@@ -147,6 +141,7 @@ int main()
         printf("\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
+        printf("\n");
 
         int crn;
 
@@ -299,53 +294,56 @@ void generateStatistics(NodeT** head)
 
     printf("\n");
 
-    int count[9] = {0};  // Initialize all to zero
+    double count[9] = {0};  // Initialize all to zero
+    int total[3] = {0};     // Initialize all to zero
 
     for (NodeT* node = *head; node != NULL; node = node->next)
     {
         if (option == 0)  // Area of Company Sales
         {
-            count[(node->turnover * 3) + node->salesArea]++;
+            count[(node->turnover * 3) + node->salesArea] += 1.0;
         }
         else
         {
-            count[(node->turnover * 3) + node->employees]++;
+            count[(node->turnover * 3) + node->employees] += 1.0;
         }
+
+        total[node->turnover]++;
     }
 
     if (option == 0)  // Area of Company Sales
     {
         printf("ICT:\n");
-        printf("    Less than 1 Million: %d\n", count[0]);
-        printf("    Less than 10 Million: %d\n", count[1]);
-        printf("    Over 10 Million: %d\n", count[2]);
+        printf("    Less than 1 Million: %.1lf%%\n", count[0] / total[0] * 100);
+        printf("    Less than 10 Million: %.1lf%%\n", count[1] / total[0] * 100);
+        printf("    Over 10 Million: %.1lf%%\n", count[2] / total[0] * 100);
 
         printf("Medical:\n");
-        printf("    Less than 1 Million: %d\n", count[3]);
-        printf("    Less than 10 Million: %d\n", count[4]);
-        printf("    Over 10 Million: %d\n", count[5]);
+        printf("    Less than 1 Million: %.1lf%%\n", count[3] / total[1] * 100);
+        printf("    Less than 10 Million: %.1lf%%\n", count[4] / total[1] * 100);
+        printf("    Over 10 Million: %.1lf%%\n", count[5] / total[1] * 100);
 
         printf("Other:\n");
-        printf("    Less than 1 Million: %d\n", count[6]);
-        printf("    Less than 10 Million: %d\n", count[7]);
-        printf("    Over 10 Million: %d\n", count[8]);
+        printf("    Less than 1 Million: %.1lf%%\n", count[6] / total[2] * 100);
+        printf("    Less than 10 Million: %.1lf%%\n", count[7] / total[2] * 100);
+        printf("    Over 10 Million: %.1lf%%\n", count[8] / total[2] * 100);
     }
     else
     {
         printf("LessThan10:\n");
-        printf("    Less than 1 Million: %d\n", count[0]);
-        printf("    Less than 10 Million: %d\n", count[1]);
-        printf("    Over 10 Million: %d\n", count[2]);
+        printf("    Less than 1 Million: %.1lf\n", count[0] / total[0] * 100);
+        printf("    Less than 10 Million: %.1lf\n", count[1] / total[0] * 100);
+        printf("    Over 10 Million: %.1lf\n", count[2] / total[0] * 100);
 
         printf("LessThan100:\n");
-        printf("    Less than 1 Million: %d\n", count[3]);
-        printf("    Less than 10 Million: %d\n", count[4]);
-        printf("    Over 10 Million: %d\n", count[5]);
+        printf("    Less than 1 Million: %.1lf\n", count[3] / total[1] * 100);
+        printf("    Less than 10 Million: %.1lf\n", count[4] / total[1] * 100);
+        printf("    Over 10 Million: %.1lf\n", count[5] / total[1] * 100);
 
         printf("Over100:\n");
-        printf("    Less than 1 Million: %d\n", count[6]);
-        printf("    Less than 10 Million: %d\n", count[7]);
-        printf("    Over 10 Million: %d\n", count[8]);
+        printf("    Less than 1 Million: %.1lf\n", count[6] / total[2] * 100);
+        printf("    Less than 10 Million: %.1lf\n", count[7] / total[2] * 100);
+        printf("    Over 10 Million: %.1lf\n", count[8] / total[2] * 100);
     }
     printf("\n");
 }
@@ -371,25 +369,30 @@ void writeFile(NodeT** head)
     FILE* file = fopen("clients.txt", "w");
     for (int option = 0; option < 2; option++)
     {
-        int count[9] = {0};  // Initialize all to zero
+        double count[9] = {0};  // Initialize all to zero
+        int total[3] = {0};     // Initialize all to zero
 
         for (NodeT* node = *head; node != NULL; node = node->next)
         {
             if (option == 0)  // Area of Company Sales
             {
-                count[(node->turnover * 3) + node->salesArea]++;
+                count[(node->turnover * 3) + node->salesArea] += 1.0;
             }
             else
             {
-                count[(node->turnover * 3) + node->employees]++;
+                count[(node->turnover * 3) + node->employees] += 1.0;
             }
+            total[node->turnover]++;
         }
 
-        for (int j = 0; j < 9; j++)
+        for (int i = 0; i < 9; i++)
         {
-            fprintf(file, "%d\n", count[j]);
+            fprintf(file, "%.1lf ", count[i] / total[(int)(i / 3)] * 100);
         }
+        fprintf(file, "\n");
     }
+
+    fprintf(file, "\n");
 
     for (NodeT* node = *head; node != NULL; node = node->next)
     {
@@ -402,8 +405,6 @@ void writeFile(NodeT** head)
         fprintf(file, "%d\n", node->lastOrder);
         fprintf(file, "%d\n", node->numEmployees);
         fprintf(file, "%d\n", node->avgOrder);
-        fprintf(file, "%d\n", node->avgOrder);
-
         fprintf(file, "%d\n", node->vatRegistered);
         fprintf(file, "%d\n", node->turnover);
         fprintf(file, "%d\n", node->employees);
@@ -418,25 +419,6 @@ void writeFile(NodeT** head)
     printf("\nFile written successfully\n\n");
 }
 
-// Read in a password
-void getPassword(char* password, int size)
-{
-    for (int i = 0; i < size; i++)
-    {
-        password[i] = getch();
-        putch('*');
-
-        // enter key finishes input
-        if (password[i] == 13)
-        {
-            password[i] = 0;
-            break;
-        }
-    }
-
-    printf("\n");
-}
-
 // Read in the clients.txt file and add the nodes to the list
 void readFile(NodeT** head)
 {
@@ -448,8 +430,8 @@ void readFile(NodeT** head)
 
         for (int i = 0; i < 18; i++)
         {
-            int throwAway;
-            fscanf(file, "%d", &throwAway);
+            double throwAway;
+            fscanf(file, "%lf", &throwAway);
         }
 
         while (true)
@@ -457,14 +439,14 @@ void readFile(NodeT** head)
             NodeT* newNode = (NodeT*)malloc(sizeof(NodeT));
 
             fscanf(file, "%d", &newNode->crn);
-            fscanf(file, "%s\n", newNode->name);
-            fscanf(file, "%s\n", newNode->country);
-            fscanf(file, "%d\n", &newNode->year);
-            fscanf(file, "%s\n", newNode->email);
-            fscanf(file, "%s\n", newNode->contact);
-            fscanf(file, "%d\n", &newNode->lastOrder);
-            fscanf(file, "%d\n", &newNode->numEmployees);
-            fscanf(file, "%d\n", &newNode->avgOrder);
+            fscanf(file, "%s", newNode->name);
+            fscanf(file, "%s", newNode->country);
+            fscanf(file, "%d", &newNode->year);
+            fscanf(file, "%s", newNode->email);
+            fscanf(file, "%s", newNode->contact);
+            fscanf(file, "%d", &newNode->lastOrder);
+            fscanf(file, "%d", &newNode->numEmployees);
+            fscanf(file, "%d", &newNode->avgOrder);
 
             int temp;
             fscanf(file, "%d", &temp);
@@ -496,6 +478,40 @@ void readFile(NodeT** head)
     }
 }
 
+// Read in a password
+void getPassword(char* password, int size)
+{
+    int i = 0;
+    while (i < size)
+    {
+        password[i] = getch();
+
+        // enter key finishes input
+        if (password[i] == 13)
+        {
+            password[i] = 0;
+            break;
+        }
+        else if (password[i] == 8)  // backspace
+        {
+            if (i > 0)
+            {
+                password[i] = 0;
+                i--;
+                putch('\b');
+                putch(' ');
+                putch('\b');
+            }
+        }
+        else
+        {
+            putch('*');
+            i++;
+        }
+    }
+    printf("\n");
+}
+
 // Lists clients ordered by turnover
 void listClients(NodeT** head)
 {
@@ -514,9 +530,16 @@ void listClients(NodeT** head)
 // Prints out all nodes in linked list
 void displayAll(NodeT** head)
 {
+    bool displayedAny = false;
     for (NodeT* node = *head; node != NULL; node = node->next)
     {
         printNode(node);
+        displayedAny = true;
+    }
+
+    if (displayedAny == false)
+    {
+        printf("No clients found\n");
     }
 }
 
@@ -553,7 +576,6 @@ bool deleteNode(NodeT** head, int crn)
 // Stream lets me reuse the same function for console and file output
 void printNode(NodeT* node)
 {
-    printf("\n");
     printf("Registration Number: %d\n", node->crn);
     printf("Company Name: %s\n", node->name);
     printf("Company Country: %s\n", node->country);
@@ -563,18 +585,60 @@ void printNode(NodeT* node)
     printf("Last Order: %d\n", node->lastOrder);
     printf("Number of Employees: %d\n", node->numEmployees);
     printf("Average Annual Order: %d\n", node->avgOrder);
+    printf("Vat Registered: %d\n", node->vatRegistered);
 
-    printf("Vat Registered:%d\n", node->vatRegistered);
-    printf("Turnover:%d\n", node->turnover);
-    printf("Employed:%d\n", node->employees);
-    printf("Salesarea:%d\n", node->salesArea);
+    switch (node->turnover)
+    {
+        case 0:
+            printf("Turnover: < 1M\n");
+            break;
+
+        case 1:
+            printf("Turnover: < 10M\n");
+            break;
+
+        case 2:
+            printf("Turnover: > 10M\n");
+            break;
+    }
+
+    switch (node->employees)
+    {
+        case 0:
+            printf("Employes: < 10\n");
+            break;
+
+        case 1:
+            printf("Employes: < 100\n");
+            break;
+
+        case 2:
+            printf("Employes: > 100\n");
+            break;
+    }
+
+    switch (node->salesArea)
+    {
+        case 0:
+            printf("AreaOfSales: ICT\n");
+            break;
+
+        case 1:
+            printf("AreaOfSales: Medical\n");
+            break;
+
+        case 2:
+            printf("AreaOfSales: Other\n");
+            break;
+    }
+
     printf("\n");
 }
 
 // Reads in a client from the console
 void readNode(NodeT* node)
 {
-    printf("Client Details\n");
+    printf("\n");
     printf("Company Name: ");
     scanf("%s", node->name);
     printf("Company Country: ");
@@ -593,7 +657,7 @@ void readNode(NodeT* node)
         char* comIndex = strstr(node->email, ".com");
 
         // make sure @ comes before .com
-        if (atIndex != NULL && comIndex != NULL && comIndex > atIndex)
+        if (atIndex != NULL && comIndex != NULL && comIndex > atIndex)  // @ should come before .com
         {
             validEmail = true;
         }
@@ -612,15 +676,31 @@ void readNode(NodeT* node)
     printf("Average Annual Order: ");
     scanf("%d", &node->avgOrder);
 
-    printf("Is Vat Registered (0 or 1): ");
     int temp;
-    scanf("%d", &temp);
-    node->vatRegistered = temp;
-    printf("Turnover: (Less than 1 Million, Less than 10 Million, Over 10 Million): ");
-    scanf("%d", &node->turnover);
-    printf("Employed (Less than 10, Less than €100, Over 100): ");
-    scanf("%d", &node->employees);
-    printf("Sales Area (ICT, Medical Devices, Other area): ");
-    scanf("%d", &node->salesArea);
+    do
+    {
+        printf("Is Vat Registered (0 or 1): ");
+        scanf("%d", &temp);
+        node->vatRegistered = temp;
+    } while (temp < 0 || temp > 1);
+
+    do
+    {
+        printf("Turnover: (0=Less than 1 Million, 1=Less than 10 Million, 2=Over 10 Million): ");
+        scanf("%d", &node->turnover);
+    } while (node->turnover < 0 || node->turnover > 2);
+
+    do
+    {
+        printf("Employed (0=Less than 10, 1=Less than 100, 2=Over 100): ");
+        scanf("%d", &node->employees);
+    } while (node->employees < 0 || node->employees > 2);
+
+    do
+    {
+        printf("Sales Area (0=ICT, 1=Medical Devices, 2=Other area): ");
+        scanf("%d", &node->salesArea);
+    } while (node->salesArea < 0 || node->salesArea > 2);
+
     printf("\n");
 }

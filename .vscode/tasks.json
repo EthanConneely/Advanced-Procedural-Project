@@ -2,22 +2,24 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "cppbuild",
+			"type": "process",
 			"label": "build",
 			"command": "C:\\Program Files\\LLVM\\bin\\clang.exe",
 			"args": [
+				"-Wall",
+				"-Wno-missing-braces",
+				"-fno-strict-aliasing",
+				"-Werror=pointer-arith",
 				"-fdiagnostics-color=always",
 				"-g",
-				"Source.c",
 				"-o",
-				"${fileDirname}\\a.exe"
+				"${workspaceFolder}\\a.exe",
+				"./Source.c",
 			],
 			"options": {
-				"cwd": "${fileDirname}"
+				"cwd": "${workspaceFolder}"
 			},
-			"problemMatcher": [
-				"$gcc"
-			],
+			"problemMatcher": "$msCompile",
 			"group": {
 				"kind": "build",
 				"isDefault": true
